@@ -8,8 +8,10 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"text/tabwriter"
 
 	"github.com/artgillespie/gopl/ch2/ex1"
+	"github.com/artgillespie/gopl/ch2/ex2/lengthconv"
 )
 
 // parse an array of strings into an array of float64
@@ -28,11 +30,14 @@ func convertToFloat(s []string) []float64 {
 // given an array of strings, return the conversion to fahrenheit
 func conversionString(s []string) string {
 	f := convertToFloat(s)
-	buf := bytes.NewBufferString("Conversions: ")
+	buf := bytes.NewBufferString("")
+	tab := tabwriter.NewWriter(buf, 0, 0, 4, ' ', tabwriter.AlignRight|tabwriter.Debug)
+	fmt.Fprintln(tab, "Value\tTemperature\tLength\t")
 	for _, v := range f {
-		buf.Write([]byte(fmt.Sprintf("%s = %s ", ex1.Celsius(v), ex1.CToF(ex1.Celsius(v)))))
+		tab.Write([]byte(fmt.Sprintf("%.2f\t%.2f\t%.2f\t\n", v, ex1.CToF(ex1.Celsius(v)), lengthconv.FToM(v))))
 	}
-	return strings.TrimSpace(buf.String())
+	tab.Flush()
+	return buf.String()
 }
 
 func main() {
@@ -42,8 +47,8 @@ func main() {
 			log.Fatalf("Error reading stdin: %v", err)
 		}
 		t := strings.TrimSpace(string(b))
-		log.Println(conversionString(strings.Split(string(t), " ")))
+		fmt.Println(conversionString(strings.Split(string(t), " ")))
 		return
 	}
-	log.Println(conversionString(os.Args[1:]))
+	fmt.Println(conversionString(os.Args[1:]))
 }
