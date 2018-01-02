@@ -32,7 +32,7 @@ func conversionString(s []string) string {
 	f := convertToFloat(s)
 	buf := bytes.NewBufferString("")
 	tab := tabwriter.NewWriter(buf, 0, 0, 4, ' ', tabwriter.AlignRight|tabwriter.Debug)
-	fmt.Fprintln(tab, "Value\tTemperature\tLength\t")
+	fmt.Fprintln(tab, "Value\tTemperature (F)\tLength (M)\t")
 	for _, v := range f {
 		tab.Write([]byte(fmt.Sprintf("%.2f\t%.2f\t%.2f\t\n", v, ex1.CToF(ex1.Celsius(v)), lengthconv.FToM(v))))
 	}
