@@ -1,4 +1,4 @@
-package tempconv
+package ex1
 
 import "fmt"
 
@@ -12,6 +12,6 @@ const (
 	BoilingC      Celsius = 100
 )
 
-func (c Celsius) String() string    { return fmt.Sprintf("%g℃", c) }
-func (f Fahrenheit) String() string { return fmt.Sprintf("%g℉", f) }
-func (k Kelvin) String() string     { return fmt.Sprintf("%g° Kelvin", k) }
+func (c Celsius) String() string    { return fmt.Sprintf("%.4g℃", c) }
+func (f Fahrenheit) String() string { return fmt.Sprintf("%.4g℉", f) }
+func (k Kelvin) String() string     { return fmt.Sprintf("%.4g° Kelvin", k) }
