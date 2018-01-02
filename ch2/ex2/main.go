@@ -12,6 +12,7 @@ import (
 
 	"github.com/artgillespie/gopl/ch2/ex1"
 	"github.com/artgillespie/gopl/ch2/ex2/lengthconv"
+	"github.com/artgillespie/gopl/ch2/ex2/weightconv"
 )
 
 // parse an array of strings into an array of float64
@@ -32,9 +33,9 @@ func conversionString(s []string) string {
 	f := convertToFloat(s)
 	buf := bytes.NewBufferString("")
 	tab := tabwriter.NewWriter(buf, 0, 0, 4, ' ', tabwriter.AlignRight|tabwriter.Debug)
-	fmt.Fprintln(tab, "Value\tTemperature (F)\tLength (M)\t")
+	fmt.Fprintln(tab, "Value\tTemperature (F)\tLength (M)\tWeight (Kg)\t")
 	for _, v := range f {
-		tab.Write([]byte(fmt.Sprintf("%.2f\t%.2f\t%.2f\t\n", v, ex1.CToF(ex1.Celsius(v)), lengthconv.FToM(v))))
+		fmt.Fprintf(tab, "%.2f\t%.2f\t%.2f\t%.2f\t\n", v, ex1.CToF(ex1.Celsius(v)), lengthconv.FToM(v), weightconv.LToK(v))
 	}
 	tab.Flush()
 	return buf.String()
