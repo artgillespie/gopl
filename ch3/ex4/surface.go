@@ -66,6 +66,8 @@ func printSVG(w io.Writer, width, height, cells int, f func(x, y float64) float6
 	fmt.Fprintln(w, "</svg>")
 }
 
+// getIntParam will pull an int out of the request's query string and
+// store the result in i if present.
 func getIntParam(r *http.Request, k string, i *int) error {
 	v := r.Form.Get(k)
 	if v == "" {
