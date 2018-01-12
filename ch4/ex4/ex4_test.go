@@ -1,6 +1,7 @@
 package ex4_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/artgillespie/gopl/ch4/ex4"
@@ -54,9 +55,9 @@ func equalArray(a []int, b []int) bool {
 	return true
 }
 
-func assertEqualArray(t *testing.T, e []int, r []int) {
+func assertEqualArray(t *testing.T, e, r []int, msg string) {
 	if !equalArray(e, r) {
-		t.Fatalf("Equal Array: Expected %v, got %v", e, r)
+		t.Fatalf("Equal Array: %s Expected %v, got %v", msg, e, r)
 	}
 }
 
@@ -76,6 +77,9 @@ func TestRotate(t *testing.T) {
 			[]int{1, 2, 3, 4, 5}, []int{4, 5, 1, 2, 3}, 2,
 		},
 		{
+			[]int{1, 2, 3, 4, 5}, []int{2, 3, 4, 5, 1}, 4,
+		},
+		{
 			[]int{1, 2, 3, 4, 5}, []int{1, 2, 3, 4, 5}, 5,
 		},
 		{
@@ -91,6 +95,6 @@ func TestRotate(t *testing.T) {
 
 	for _, test := range tests {
 		ex4.Rotate(test.a, test.n)
-		assertEqualArray(t, test.e, test.a)
+		assertEqualArray(t, test.e, test.a, fmt.Sprintf("rotating %d", test.n))
 	}
 }

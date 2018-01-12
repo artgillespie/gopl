@@ -10,15 +10,10 @@ func Rotate(a []int, n int) {
 	}
 
 	if p < 0 {
-		tmp := make([]int, -p)
-		copy(tmp, a[:-p])
-		copy(a[:], a[-p:])
-		copy(a[len(a)+p:], tmp)
-	} else {
-		tmp := make([]int, p)
-		copy(tmp, a[len(a)-p:])
-		copy(a[p:], a[:len(a)-p])
-		copy(a[:], tmp)
+		p += len(a)
 	}
-
+	tmp := make([]int, p)
+	copy(tmp, a[len(a)-p:])
+	copy(a[p:], a[:len(a)-p])
+	copy(a[:], tmp)
 }
