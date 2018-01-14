@@ -15,7 +15,24 @@ func Dedup(strings []string) []string {
 }
 
 func TestDeDup(t *testing.T) {
-	var s = []string{"one", "two", "two", "three"}
-	s2 := Dedup(s)
-	t.Logf("s2: %v, s: %v", s2, s)
+	var tests = []struct {
+		a []string
+		b []string
+	}{
+		{
+			[]string{"one", "two", "two", "three"},
+			[]string{"one", "two", "three"},
+		},
+	}
+	for _, test := range tests {
+		s2 := Dedup(test.a)
+		if l := len(s2); l != len(test.b) {
+			t.Errorf("Expected %d to equal %d", l, len(test.b))
+		}
+		for i, v := range s2 {
+			if v != s2[i] {
+				t.Errorf("Expected %s to equal %s", v, s2[i])
+			}
+		}
+	}
 }
