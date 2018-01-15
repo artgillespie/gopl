@@ -19,6 +19,7 @@ func CollapseSpace(b []byte) []byte {
 			}
 		} else {
 			running = false
+			// ?? is this the simplest way to get bytes from a rune?
 			for _, c := range []byte(string(v)) {
 				b[p] = c
 				p++
