@@ -14,6 +14,6 @@ func main() {
 		os.Exit(-1)
 	}
 	for _, issue := range result.Items {
-		fmt.Printf("%d\t%s\t%s\t%s\n", issue.Number, issue.Title, issue.User.Login, issue.State)
+		fmt.Printf("#%-5d %-55.55s %-9.9s %s\n", issue.Number, issue.Title, issue.User.Login, issue.State)
 	}
 }
