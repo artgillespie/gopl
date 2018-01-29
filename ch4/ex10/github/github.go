@@ -14,7 +14,7 @@ const IssuesURL = "https://api.github.com/search/issues"
 
 type IssueSearchResult struct {
 	TotalCount int `json:"total_count`
-	Items      []*Issue
+	Items      IssueSlice
 }
 
 type Issue struct {
@@ -30,6 +30,20 @@ type Issue struct {
 type User struct {
 	Login   string
 	HTMLURL string `json:"html_url"`
+}
+
+type IssueSlice []*Issue
+
+func (issues IssueSlice) Len() int {
+	return len(issues)
+}
+
+func (issues IssueSlice) Less(i, j int) bool {
+	return issues[i].CreatedAt.Before(issues[j].CreatedAt)
+}
+
+func (issues IssueSlice) Swap(i, j int) {
+	issues[i], issues[j] = issues[j], issues[i]
 }
 
 // SearchIssues queries the GitHub issue tracker
