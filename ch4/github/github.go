@@ -1,6 +1,7 @@
 package github
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -68,4 +69,33 @@ func SearchIssues(terms []string) (*IssueSearchResult, error) {
 		return nil, err
 	}
 	return &result, nil
+}
+
+func CreateIssue(title string, body string) (*Issue, error) {
+	var p = struct {
+		Title string `json:"title"`
+		Body  string `json:"body"`
+	}{title, body}
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, err
+	}
+	res, err := http.Post(IssuesURL+"/repos/artgillespie/gopl/issues", "application/json", bytes.NewReader(b))
+	if err != nil {
+		return nil, err
+	}
+	if res.StatusCode != http.StatusCreated {
+		return nil, fmt.Errorf("Issue not created %d %s", res.StatusCode, res.Status)
+	}
+	defer res.Body.Close()
+	b, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+	var issue Issue
+	err = json.Unmarshal(b, &issue)
+	if err != nil {
+		return nil, err
+	}
+	return &issue, nil
 }
