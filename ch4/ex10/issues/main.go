@@ -6,7 +6,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/artgillespie/gopl/ch4/ex10/github"
+	"github.com/artgillespie/gopl/ch4/github"
 )
 
 func String(i *github.Issue) string {
