@@ -7,11 +7,13 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 	"time"
 )
 
-const IssuesURL = "https://api.github.com/search/issues"
+const APIURL = "https://api.github.com/"
+const IssuesURL = APIURL + "search/issues"
 
 type IssueSearchResult struct {
 	TotalCount int `json:"total_count`
@@ -80,12 +82,20 @@ func CreateIssue(title string, body string) (*Issue, error) {
 	if err != nil {
 		return nil, err
 	}
-	res, err := http.Post(IssuesURL+"/repos/artgillespie/gopl/issues", "application/json", bytes.NewReader(b))
+	var client http.Client
+	req, err := http.NewRequest("POST", APIURL+"repos/artgillespie/gopl/issues", bytes.NewReader(b))
+	if err != nil {
+		return nil, err
+	}
+	req.SetBasicAuth(os.Getenv("GITHUB_USERNAME"), os.Getenv("GITHUB_PASSWORD"))
+	res, err := client.Do(req)
+
 	if err != nil {
 		return nil, err
 	}
 	if res.StatusCode != http.StatusCreated {
-		return nil, fmt.Errorf("Issue not created %d %s", res.StatusCode, res.Status)
+		b, err = ioutil.ReadAll(res.Body)
+		return nil, fmt.Errorf("Issue not created %d %s %s", res.StatusCode, res.Status, b)
 	}
 	defer res.Body.Close()
 	b, err = ioutil.ReadAll(res.Body)

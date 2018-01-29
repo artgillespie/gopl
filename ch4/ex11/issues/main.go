@@ -3,8 +3,11 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"os/exec"
+
+	"github.com/artgillespie/gopl/ch4/github"
 )
 
 func editWithUsersTextEditor(s string) (string, error) {
@@ -60,10 +63,17 @@ func editWithUsersTextEditor(s string) (string, error) {
 }
 
 func main() {
-	s, err := editWithUsersTextEditor("Hello, Text Editor!")
+	/*
+		s, err := editWithUsersTextEditor("Hello, Text Editor!")
+		if err != nil {
+			panic(fmt.Sprintf("Couldn't edit with text editor: %s", err))
+		}
+		fmt.Println("After Edit:")
+		fmt.Println(s)
+	*/
+	issue, err := github.CreateIssue("A Test Issue", "This is a test issue")
 	if err != nil {
-		panic(fmt.Sprintf("Couldn't edit with text editor: %s", err))
+		panic(err)
 	}
-	fmt.Println("After Edit:")
-	fmt.Println(s)
+	log.Printf("Issue Created: %v", issue)
 }
