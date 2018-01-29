@@ -9,10 +9,11 @@ import (
 
 func editWithUsersTextEditor(s string) (string, error) {
 	// write out the string we want the user to edit to a tmp file
-	f, err := os.OpenFile("/tmp/issues.txt", os.O_RDWR|os.O_CREATE, 0755)
+	f, err := ioutil.TempFile("", "issues-")
 	if err != nil {
 		return "", err
 	}
+	tmpPath := f.Name()
 	_, err = f.WriteString(s)
 	f.Close()
 	if err != nil {
@@ -31,7 +32,7 @@ func editWithUsersTextEditor(s string) (string, error) {
 	}
 
 	// launch the user's editor
-	cmd := exec.Command(fullEditorPath, "/tmp/issues.txt")
+	cmd := exec.Command(fullEditorPath, tmpPath)
 	// even if we're not using these, they have to be connected in order for this to work
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
@@ -41,12 +42,17 @@ func editWithUsersTextEditor(s string) (string, error) {
 		return "", err
 	}
 	// open the tmp file and read the user's edits back in
-	f, err = os.Open("/tmp/issues.txt")
+	f, err = os.Open(tmpPath)
 	if err != nil {
 		return "", err
 	}
 	defer f.Close()
 	b, err := ioutil.ReadAll(f)
+	if err != nil {
+		return "", err
+	}
+	// remove the tmp file
+	err = os.Remove(tmpPath)
 	if err != nil {
 		return "", err
 	}
